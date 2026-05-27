@@ -1,7 +1,7 @@
 ---
 title: "Conditional transformations"
 subtitle: "Practice with mutate() and case_when()"
-author: ""
+author: "Yashika Aggarwal"
 format:
   html:
     embed-resources: true
@@ -25,14 +25,15 @@ All exercises in this assignment use the `gapminder` data as a starting point.
 
 2.  Run the code chunk that contains `glimpse(gapminder)`.
 
-3.  How many variables are in the data set?
+3.  How many variables are in the data set? 6
 
-4.  How many observations are in the data set?
+4.  How many observations are in the data set? 1704
 
-5.  What data types are contained in the variables?
+5.  What data types are contained in the variables? categorical, discrete numerical and continous numerical
 
 ```{r}
 glimpse(gapminder)
+help("gapminder")
 ```
 
 ## Task 2: A first use of `case_when()`
@@ -52,48 +53,63 @@ gapminder |>
 
 2.  Write in your own words what `case_when()` is doing here:
 
-*Your answer here:*
+*Your answer here: case_when is diving countries based on there gdpPercap in gapminder dataset where the pipeoperator is used to assign the data to next function which is mutate which adds a new variable in dataset called gdp_group and case_when here is used to divide the observations according to the assigned values.*
 
 ## Task 3: Classify life expectancy
 
 Use `mutate()` and `case_when()` to add a new column called `life_exp_group` to `gapminder` that classifies each row as:
 
-- `"short"` when `lifeExp` is less than 50
-- `"medium"` when `lifeExp` is between 50 and 70 (inclusive of 50, exclusive of 70)
-- `"long"` when `lifeExp` is 70 or greater
+-   `"short"` when `lifeExp` is less than 50
+-   `"medium"` when `lifeExp` is between 50 and 70 (inclusive of 50, exclusive of 70)
+-   `"long"` when `lifeExp` is 70 or greater
 
 ```{r}
-
+gapminder|>
+  mutate(life_exp_group = case_when(
+    lifeExp < 50 ~ "short",
+    lifeExp >= 50 & lifeExp < 70 ~ "medium",
+    lifeExp > 50 ~ "long"
+  ))
 ```
 
 ## Task 4: A default category with `TRUE`
 
 Use `mutate()` and `case_when()` to add a new column called `pop_size` to `gapminder` that classifies each country as:
 
-- `"small"` when `pop` is less than 1,000,000
-- `"medium"` when `pop` is less than 50,000,000
-- `"large"` for all remaining rows (use `TRUE ~ "large"` as the last condition)
+-   `"small"` when `pop` is less than 1,000,000
+-   `"medium"` when `pop` is less than 50,000,000
+-   `"large"` for all remaining rows (use `TRUE ~ "large"` as the last condition)
 
 ```{r}
-
+gapminder |>
+  mutate(pop_size = case_when(
+    pop < 1000000 ~ "small",
+    pop < 50000000 ~ "medium",
+    TRUE ~ "large"
+  ))
 ```
 
 1.  What does `TRUE ~ "large"` do? Why is it useful?
 
-*Your answer here:*
+*Your answer here:* TRUE \~ "large" helps R to assign the values that do not lie in certain row if none of the previous conditions are true and it helps to assign the values that have NA to certain row.
 
 ## Task 5: Combining multiple conditions
 
 Use `mutate()` and `case_when()` to add a new column called `status` to `gapminder` that classifies each row as:
 
-- `"thriving"` when `lifeExp` is greater than 70 AND `gdpPercap` is greater than 15000
-- `"developing"` when `lifeExp` is greater than 60 AND `gdpPercap` is greater than 2000
-- `"struggling"` for everything else
+-   `"thriving"` when `lifeExp` is greater than 70 AND `gdpPercap` is greater than 15000
+-   `"developing"` when `lifeExp` is greater than 60 AND `gdpPercap` is greater than 2000
+-   `"struggling"` for everything else
 
 Tip: use `&` to combine two conditions inside `case_when()`.
 
 ```{r}
-
+gapminder |>
+  mutate(status = case_when(
+    lifeExp > 70 & gdpPercap > 15000 ~ "thriving",
+    lifeExp > 60 & gdpPercap > 2000 ~ "developing",
+    TRUE ~ "struggling"
+  ))
 ```
 
 ## Task 6: Handling missing values
@@ -111,29 +127,39 @@ practice_df
 
 Use `mutate()` and `case_when()` to add a new column called `category` to `practice_df` that classifies each row as:
 
-- `"low"` when `score` is less than 30
-- `"high"` when `score` is 30 or greater
-- `"unknown"` when `score` is `NA` (use `is.na(score) ~ "unknown"`)
+-   `"low"` when `score` is less than 30
+-   `"high"` when `score` is 30 or greater
+-   `"unknown"` when `score` is `NA` (use `is.na(score) ~ "unknown"`)
 
 ```{r}
-
+practice_df |>
+  mutate(category = case_when(
+    score < 30 ~ "low",
+    score >= 30 ~ "high",
+    is.na(score) ~ "unknown"
+  ))
 ```
 
 1.  What happens to `NA` values if you do *not* include `is.na(score) ~ "unknown"`?
 
-*Your answer here:*
+*Your answer here: They come as NA then and not categorized into categories of low and high.*
 
 ## Task 7: Save your work
 
 In Tasks 3–6 the results appeared in the Console but did not get saved anywhere. Use the assignment operator `<-` to save your favourite version into a new object called `gapminder_classified`.
 
 ```{r}
-
+gapminder_classified <- gapminder|>
+  mutate(life_exp_group = case_when(
+    lifeExp < 50 ~ "short",
+    lifeExp >= 50 & lifeExp < 70 ~ "medium",
+    lifeExp > 50 ~ "long"
+  ))
 ```
 
-1.  What new object appears in your Environment?
+1.  What new object appears in your Environment? New object gapminder data with gapminder_classified appears in the enviornment.
 
-2.  Why would we use the assignment operator `<-` to save our results?
+2.  Why would we use the assignment operator `<-` to save our results? It helps to save the data for later use.
 
 ## Task 8: Data communication
 
@@ -145,4 +171,4 @@ In Tasks 3–6 the results appeared in the Console but did not get saved anywher
 
 ## Task 9: Commit & Push & Issue
 
-- Refer back to the instructions on the course website to complete the assignment.
+-   Refer back to the instructions on the course website to complete the assignment.
