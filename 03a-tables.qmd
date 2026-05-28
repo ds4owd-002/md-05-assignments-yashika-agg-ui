@@ -1,7 +1,7 @@
 ---
 title: "Communicating with tables"
 subtitle: "Practice with gt() and kable()"
-author: ""
+author: "yashika aggarwal"
 format:
   html:
     embed-resources: true
@@ -42,7 +42,7 @@ gapminder_2007_summary
 
 1.  How many rows and columns does `gapminder_2007_summary` have?
 
-*Your answer here:*
+*Your answer here:* 5 columns and 4 rows
 
 ## Task 3: A first table with `kable()`
 
@@ -56,14 +56,14 @@ kable(gapminder_2007_summary)
 
 2.  Compare the printed output in the Console with the rendered output. What is different?
 
-*Your answer here:*
+*Your answer here:* only the table is printed when we dont render which is basic to visualize whereas with render more comprehensive data structure of table is presented.
 
 ## Task 4: Control decimals with `digits`
 
 The numbers in the table from Task 3 have many decimal places. Use the `digits` argument of `kable()` to round all numeric columns to 1 decimal place.
 
 ```{r}
-
+kable(gapminder_2007_summary,digits = 1)
 ```
 
 ## Task 5: Better column names
@@ -72,15 +72,23 @@ The column names `n_countries`, `life_exp_mean` and `gdp_mean` are fine for code
 
 Use the `col.names` argument of `kable()` to display the columns as:
 
-- `"Continent"`
-- `"Number of countries"`
-- `"Mean life expectancy (years)"`
-- `"Mean GDP per capita (USD)"`
+-   `"Continent"`
+-   `"Number of countries"`
+-   `"Mean life expectancy (years)"`
+-   `"Mean GDP per capita (USD)"`
 
 Keep `digits = 1` so values are still rounded to one decimal place.
 
 ```{r}
-
+kable(gapminder_2007_summary, 
+      digits = 1,
+      col.names = c(
+    "Continent",
+    "Number of countries",
+    "Mean life expectancy (years)",
+    "Mean GDP per capita (USD)"
+  )
+)
 ```
 
 ## Task 6: Add a caption with `kable()`
@@ -92,12 +100,22 @@ Use the `caption` argument of `kable()` to add the caption:
 Keep the nicer column names and the `digits = 1` argument from Task 5.
 
 ```{r}
-
+kable(
+  gapminder_2007_summary,
+  digits = 1,
+  col.names = c(
+    "Continent",
+    "Number of countries",
+    "Mean life expectancy (years)",
+    "Mean GDP per capita (USD)"
+  ),
+  caption = "Life expectancy and GDP per capita by continent in 2007."
+)
 ```
 
 1.  Render the document. Where does the caption appear in the output?
 
-*Your answer here:*
+*Your answer here: on top of the table*
 
 ## Task 7: A first table with `gt()`
 
@@ -112,32 +130,52 @@ gapminder_2007_summary |>
 
 2.  Briefly describe two differences between the `gt()` output and the `kable()` output:
 
-*Your answer here:*
+*Your answer here: gt() gave the output in viewer whereas kable() gave it in html format.*
+
+Also gt() table is more comprehensive
 
 ## Task 8: Add a title and a caption with `gt()`
 
 Use `gt()` together with `tab_header()` to add:
 
-- a title: `"Life expectancy and GDP per capita"`
-- a subtitle: `"By continent, 2007"`
+-   a title: `"Life expectancy and GDP per capita"`
+-   a subtitle: `"By continent, 2007"`
 
 ```{r}
-
+gapminder_2007_summary |>
+  gt() |>
+  tab_header(
+    title = "Life expectancy and GDP per capita",
+    subtitle = "By continent, 2007"
+  )
 ```
 
 ## Task 9: Rename columns with `cols_label()`
 
 Use `cols_label()` to give the columns reader-friendly names in your `gt()` table:
 
-- `continent` → `"Continent"`
-- `n_countries` → `"Number of countries"`
-- `life_exp_mean` → `"Mean life expectancy (years)"`
-- `gdp_mean` → `"Mean GDP per capita (USD)"`
+-   `continent` → `"Continent"`
+-   `n_countries` → `"Number of countries"`
+-   `life_exp_mean` → `"Mean life expectancy (years)"`
+-   `gdp_mean` → `"Mean GDP per capita (USD)"`
 
 Keep the title and subtitle from the previous task.
 
 ```{r}
-
+gapminder_2007_summary |>
+  gt() |>
+  tab_header(
+    title = "Life expectancy and GDP per capita",
+    subtitle = "By continent, 2007"
+  ) |>
+  cols_label(
+    continent = "Continent",
+    n_countries = "Number of countries",
+    life_exp_mean = "Mean life expectancy (years)",
+    gdp_mean = "Mean GDP per capita (USD)"
+  )
+    
+    
 ```
 
 ## Task 10: Choose your favourite
@@ -145,7 +183,15 @@ Keep the title and subtitle from the previous task.
 Pick the table you like best from the previous tasks (either a `kable()` or a `gt()` version) and reproduce it in the code chunk below.
 
 ```{r}
-
+kable(gapminder_2007_summary, 
+      digits = 1,
+      col.names = c(
+    "Continent",
+    "Number of countries",
+    "Mean life expectancy (years)",
+    "Mean GDP per capita (USD)"
+  )
+)
 ```
 
 1.  Why did you choose this version over the others? Think about how easy it is to read and how it would look in a report.
@@ -162,4 +208,4 @@ Pick the table you like best from the previous tasks (either a `kable()` or a `g
 
 ## Task 12: Commit & Push & Issue
 
-- Refer back to the instructions on the course website to complete the assignment.
+-   Refer back to the instructions on the course website to complete the assignment.

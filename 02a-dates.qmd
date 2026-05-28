@@ -1,7 +1,7 @@
 ---
 title: "Working with dates and times"
 subtitle: "Practice with lubridate"
-author: ""
+author: "Yashika Aggarwal"
 format:
   html:
     embed-resources: true
@@ -30,6 +30,7 @@ The `economics` dataset comes with `ggplot2` and contains US economic time serie
 
 ```{r}
 glimpse(economics)
+help(economics)
 ```
 
 ## Task 2: Convert text to a date with `as_date()`
@@ -42,18 +43,22 @@ as_date("2024-03-15")
 
 1.  Use `as_date()` to convert each of the following strings into a date and run them in a single code chunk:
 
-- `"2020-01-31"`
-- `"2023-07-04"`
-- `"1999-12-31"`
+-   `"2020-01-31"`
+-   `"2023-07-04"`
+-   `"1999-12-31"`
 
 ```{r}
-
+as_date("2020-01-31")
+as_date("2023-07-04")
+as_date("1999-12-31")
 ```
 
 2.  What class does `as_date()` return? Use `class()` to check on one of your results.
 
-```{r}
+    Ans: as_date return as Date and class return as date category
 
+```{r}
+class(as_date("1999-12-31"))
 ```
 
 ## Task 3: What is today?
@@ -67,33 +72,43 @@ today()
 1.  Write code that calculates how many days have passed between `"2000-01-01"` and `today()`. Tip: you can subtract two dates with `-`.
 
 ```{r}
-
+today() - as_date("2000-01-01")
 ```
 
-*Your answer (in days) here:*
+*Your answer (in days) here: 9644 days*
 
 ## Task 4: Extract components with `year()`, `month()`, and `day()`
 
 Use `mutate()` together with `year()`, `month()`, and `day()` to add three new columns to `economics`:
 
-- `year` containing the year of `date`
-- `month` containing the month of `date`
-- `day` containing the day of the month of `date`
+-   `year` containing the year of `date`
+-   `month` containing the month of `date`
+-   `day` containing the day of the month of `date`
 
 Save the result in a new object called `economics_dates`.
 
 ```{r}
-
+economics_dates <- economics |>
+  mutate(
+    year = year(date),
+    month = month(date),
+    day = day(date)
+  )
 ```
 
-1.  Look at the new columns. What data type are they?
+1.  Look at the new columns. What data type are they? The new columns are numerical.
 
 *Your answer here:*
 
 2.  Modify the `month()` call by adding `label = TRUE` to get month abbreviations (e.g. `"Jan"`, `"Feb"`) instead of numbers. Save the new result into `economics_dates` again.
 
 ```{r}
-
+economics_dates <- economics |>
+  mutate(
+    year = year(date),
+    month = month(date, label = TRUE),
+    day = day(date)
+  )
 ```
 
 ## Task 5: Day of the week with `wday()`
@@ -111,7 +126,10 @@ wday("2024-03-15", label = TRUE, week_start = 1)
 2.  Add a new column called `weekday` to `economics_dates` (from Task 4) that contains the labelled day of the week of `date`, with the week starting on Monday (`week_start = 1`).
 
 ```{r}
+economics_dates <- economics_dates |>
+  mutate(weekday = wday(date, label = TRUE, week_start = 1))
 
+economics_dates
 ```
 
 ## Task 6: Day of the year with `yday()`
@@ -129,25 +147,31 @@ yday(today())
 2.  Add a new column called `day_of_year` to `economics_dates` that contains the day of the year of `date`.
 
 ```{r}
+economics_dates <- economics_dates |>
+  mutate(day_of_year = yday(date)
+         )
 
+economics_dates
 ```
 
 3.  How many days into the year are we today?
 
-*Your answer here:*
+*Your answer here: 148*
 
 ## Task 7: Filter by date components
 
 Use `filter()` together with `year()` to create a subset of `economics` that only contains observations from the year 2010.
 
 ```{r}
-
+economics |>
+  filter(year(date) == 2010)
 ```
 
 Use `filter()` together with `year()` and `month()` to create a subset of `economics` that only contains observations from January of any year.
 
 ```{r}
-
+economics |>
+  filter(month(date) == 1)
 ```
 
 ## Task 8: Time zones with `with_tz()`
@@ -168,14 +192,16 @@ with_tz(moment, tzone = "Asia/Tokyo")
 2.  Convert `moment` to the time zone `"Pacific/Auckland"`. What time and date is it there?
 
 ```{r}
+moment <- ymd_hms("2024-06-21 12:00:00")
 
+with_tz(moment, tzone = "Pacific/Auckland")
 ```
 
 *Your answer here:*
 
 3.  `with_tz()` does *not* change the actual instant in time. Explain in your own words what it changes:
 
-*Your answer here:*
+*Your answer here: The way date and time is written.*
 
 ## Task 9: Putting it together
 
@@ -190,7 +216,11 @@ Starting from `economics`, build a single pipeline that:
 4.  Saves the result to a new object called `economics_recent`.
 
 ```{r}
-
+economics_recent <- economics_dates |>
+  mutate(year = year(date),
+         month_name = month(date, label = TRUE)
+         ) |>
+  filter(year >= 2010)
 ```
 
 ## Task 10: Data communication
@@ -203,4 +233,4 @@ Starting from `economics`, build a single pipeline that:
 
 ## Task 11: Commit & Push & Issue
 
-- Refer back to the instructions on the course website to complete the assignment.
+-   Refer back to the instructions on the course website to complete the assignment.
